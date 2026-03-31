@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swigram Auth</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <div class="brand">
+        <span class="badge">One-Stop Solution to Non-Stop Cravings</span>
+        <h1>Swigram</h1>
+        <p>Food vibes that keep your cravings on.</p>
+      </div>
+
+      <div class="tabs">
+        <button id="tab-login" class="tab active" type="button">Login</button>
+        <button id="tab-signup" class="tab" type="button">Sign Up</button>
+      </div>
+
+      <form id="login-form" class="form active">
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" required placeholder="you@example.com" />
+
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" required minlength="6" placeholder="Enter password" />
+
+        <button class="submit-btn" type="submit">Login</button>
+      </form>
+
+      <form id="signup-form" class="form">
+        <label for="signup-name">Name</label>
+        <input id="signup-name" name="name" type="text" required placeholder="Your name" />
+
+        <label for="signup-email">Email</label>
+        <input id="signup-email" name="email" type="email" required placeholder="you@example.com" />
+
+        <label for="signup-password">Password</label>
+        <input id="signup-password" name="password" type="password" required minlength="6" placeholder="Create password" />
+
+        <button class="submit-btn" type="submit">Create Account</button>
+      </form>
+
+      <p id="status" class="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
