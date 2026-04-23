@@ -1,16 +1,38 @@
 {
-  "name": "fooddeliveryapp_reels",
+  "name": "swigram",
   "version": "1.0.0",
   "description": "a food delivery app with reel customization",
+  "homepage": "https://github.com/prajvalsharma18/swigram#readme",
+  "bugs": {
+    "url": "https://github.com/prajvalsharma18/swigram/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prajvalsharma18/swigram.git"
+  },
   "license": "ISC",
   "author": "",
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "ejs": "^5.0.1",
     "express": "^5.2.1",
-    "mongoose": "^9.3.3"
+    "joi": "^18.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.3.3",
+    "nodemon": "^3.1.14"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2"
   }
 }
