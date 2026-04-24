@@ -12,7 +12,7 @@ const sentinelEl = document.getElementById("sentinel");
 const meEl = document.getElementById("me");
 const logoutBtn = document.getElementById("logout");
 
-let activeView = "feed"; // 'feed' | 'liked'
+let activeView = "feed";
 const PAGE_SIZE = 12;
 
 let page = 1;
@@ -23,7 +23,6 @@ let videoIO = null;
 const REPEAT_REELS = true;
 
 function shouldRepeat() {
-  // Repeat only for the main feed, not for Liked section
   return REPEAT_REELS && activeView === "feed";
 }
 
@@ -68,8 +67,6 @@ function setActiveTab(view) {
   tabFeed.classList.toggle("active", isFeed);
   tabLiked.classList.toggle("active", !isFeed);
   panelTitle.textContent = isFeed ? "Feed" : "Liked";
-
-  // Ensure infinite scroll is active when switching tabs
   setupInfiniteScroll();
 }
 
@@ -96,7 +93,6 @@ function attachVideoObserver() {
         const card = entry.target;
         const video = card.querySelector("video");
         if (!video) continue;
-
         if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
           video.muted = true;
           const p = video.play();
@@ -108,7 +104,6 @@ function attachVideoObserver() {
     },
     { root: feedEl, threshold: [0.2, 0.6, 0.9] }
   );
-
   gridEl.querySelectorAll(".card").forEach((card) => videoIO.observe(card));
 }
 
@@ -139,9 +134,12 @@ function clearSkeleton() {
   gridEl.querySelectorAll(".skeleton").forEach((el) => el.remove());
 }
 
-function appendReels(reels) {
+function appendReels(reels, meta) {
   if (!Array.isArray(reels) || reels.length === 0) return;
   const tmp = document.createElement("div");
+  const isCache = meta?.source === 'cache';
+  const responseTime = meta?.responseTime ?? '?';
+
   tmp.innerHTML = reels
     .map((r) => {
       const title = escapeHtml(r.title);
@@ -149,7 +147,6 @@ function appendReels(reels) {
       const posterUrl = r.posterUrl ? escapeHtml(r.posterUrl) : "";
       const cdnUrl = r.cdnUrl ? escapeHtml(r.cdnUrl) : "";
       const id = escapeHtml(r._id);
-      // In the "Liked" section, these should always render as liked.
       const liked = activeView === "liked" ? true : Boolean(r.liked);
       const createdAt = formatCreatedAt(r.createdAt);
 
@@ -162,6 +159,11 @@ function appendReels(reels) {
                 } src="${cdnUrl}"></video>`
               : `<div class="video" aria-hidden="true"></div>`
           }
+
+          <div class="cacheBadge ${isCache ? 'cache' : 'db'}">
+            ${isCache ? '⚡ Cached' : '🗄️ Fresh'} · ${responseTime}ms
+          </div>
+
           <div class="overlay">
             <div class="content">
               <div class="title">${title}</div>
@@ -190,7 +192,6 @@ function appendReels(reels) {
 async function loadNextPage() {
   if (isLoading) return;
 
-  // FIX: repeat reels when all loaded
   if (!hasMore) {
     if (!shouldRepeat()) return;
     page = 1;
@@ -220,14 +221,13 @@ async function loadNextPage() {
       if (items.length === 0) {
         gridEl.innerHTML = `<p class="status">No reels found.</p>`;
         hasMore = false;
-        // Prevent fluttering: stop infinite-scroll when empty
         if (io) io.disconnect();
         isLoading = false;
         return;
       }
     }
 
-    appendReels(items);
+    appendReels(items, data.meta);
     hasMore = Boolean(data.hasMore);
     page += 1;
     setStatus(hasMore ? "" : "You're all caught up.");
@@ -260,7 +260,6 @@ function resetAndLoad() {
   return loadNextPage();
 }
 
-// FIX: sentinel observed inside feedEl with correct rootMargin
 function setupInfiniteScroll() {
   if (io) io.disconnect();
   io = new IntersectionObserver(
