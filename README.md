@@ -13,4 +13,4 @@ Provisioned AWS S3 bucket for video storage and configured CloudFront CDN distri
 
 3. JWT Authentication
 
-Engineered stateless JWT authentication with bcrypt password hashing (salt rounds: 10), Joi input validation, and dual middleware for route-level access control with 24-hour token expiry.
+Made stateless JWT authentication with bcrypt password hashing (salt rounds: 10), Joi input validation, and dual middleware for route-level access control with 24-hour token expiry.
