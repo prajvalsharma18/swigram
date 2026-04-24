@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/reels/" />
+    <title>Swigram • Reels</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">Swigram</span>
+        <span class="subtitle">Reels</span>
+      </div>
+
+      <nav class="tabs" aria-label="Sections">
+        <button id="tab-feed" class="tab active" type="button">Feed</button>
+        <button id="tab-liked" class="tab" type="button">Liked</button>
+      </nav>
+
+      <div class="actions">
+        <span id="me" class="me" title="Signed in user"></span>
+        <button id="logout" class="logout" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="panel">
+        <div class="panelHead">
+          <h1 id="panelTitle">Feed</h1>
+          <button id="refresh" class="refresh" type="button">Refresh</button>
+        </div>
+
+        <p id="status" class="status" aria-live="polite"></p>
+
+        <!-- Shorts-style vertical feed -->
+        <div id="feed" class="feed" aria-live="polite">
+          <div id="grid" class="stack"></div>
+          <div id="sentinel" class="sentinel" aria-hidden="true"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

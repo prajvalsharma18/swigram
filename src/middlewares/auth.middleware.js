@@ -40,6 +40,36 @@ function requireAuth(req, res, next) {
   }
 }
 
+/**
+ * Optional auth:
+ * - If a valid Bearer token is present, sets `req.user`
+ * - If missing/invalid token, continues without `req.user`
+ */
+function optionalAuth(req, res, next) {
+  const header = req.headers.authorization;
+  const token =
+    typeof header === 'string' && header.startsWith('Bearer ')
+      ? header.slice(7).trim()
+      : null;
+
+  if (!token || !process.env.JWT_SECRET) {
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = {
+      _id: decoded._id,
+      email: decoded.email
+    };
+  } catch {
+    // ignore invalid token
+  }
+
+  return next();
+}
+
 module.exports = {
-  requireAuth
+  requireAuth,
+  optionalAuth
 };

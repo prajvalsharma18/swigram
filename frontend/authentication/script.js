@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "http://localhost:3000/api";
 const TOKEN_KEY = "swigram_token";
 
 const tabLogin = document.getElementById("tab-login");
@@ -123,6 +123,7 @@ loginForm.addEventListener("submit", async (event) => {
       setStatus(result.message || "Login successful", "success");
       showToast("Welcome back! Login successful.", "success");
       loginForm.reset();
+      window.location.href = "/reels/";
       return;
     }
     setStatus(result.message || "Login failed", "error");
@@ -151,12 +152,14 @@ signupForm.addEventListener("submit", async (event) => {
       }
       setStatus(result.message || "Signup successful.", "success");
       signupForm.reset();
-      const path = authPath();
-      const toastText = result.token
-        ? "Account created! You are signed in."
-        : "Account created! Please login to continue.";
-      const nextUrl = `${path}?mode=login&toast=${encodeURIComponent(toastText)}`;
-      window.location.href = nextUrl;
+      if (result.token) {
+        window.location.href = "/reels/";
+      } else {
+        const path = authPath();
+        const toastText = "Account created! Please login to continue.";
+        const nextUrl = `${path}?mode=login&toast=${encodeURIComponent(toastText)}`;
+        window.location.href = nextUrl;
+      }
       return;
     }
     setStatus(result.message || "Signup failed", "error");
