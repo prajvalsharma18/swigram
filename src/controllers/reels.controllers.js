@@ -175,7 +175,7 @@ async function getLikedReels(req, res) {
       meta: {
         source: 'db',
         responseTime: Date.now() - startTime,
-        reelIds: slice.map(r => String(r._id))  // ⬅️ added
+        reelIds: slice.map(r => String(r._id))  
       }
     });
   } catch (err) {
