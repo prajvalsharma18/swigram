@@ -1,4 +1,6 @@
-const API_BASE_URL = "http://localhost:3000/api";
+const API_BASE_URL = window.location.hostname === 'localhost'
+  ? "http://localhost:3000/api"
+  : "/api";
 const TOKEN_KEY = "swigram_token";
 
 const tabFeed = document.getElementById("tab-feed");
@@ -20,7 +22,7 @@ let hasMore = true;
 let isLoading = false;
 let io = null;
 let videoIO = null;
-const REPEAT_REELS = true;
+const REPEAT_REELS = false;
 
 function shouldRepeat() {
   return REPEAT_REELS && activeView === "feed";
@@ -152,18 +154,15 @@ function appendReels(reels, meta) {
 
       return `
         <article class="card" data-reel-id="${id}">
-          ${
-            cdnUrl
-              ? `<video class="video" playsinline muted loop preload="metadata" ${
-                  posterUrl ? `poster="${posterUrl}"` : ""
-                } src="${cdnUrl}"></video>`
-              : `<div class="video" aria-hidden="true"></div>`
+          ${cdnUrl
+            ? `<video class="video" playsinline muted loop preload="metadata" ${
+                posterUrl ? `poster="${posterUrl}"` : ""
+              } src="${cdnUrl}"></video>`
+            : `<div class="video" aria-hidden="true"></div>`
           }
-
           <div class="cacheBadge ${isCache ? 'cache' : 'db'}">
             ${isCache ? '⚡ Cached' : '🗄️ Fresh'} · ${responseTime}ms
           </div>
-
           <div class="overlay">
             <div class="content">
               <div class="title">${title}</div>
@@ -194,6 +193,7 @@ async function loadNextPage() {
 
   if (!hasMore) {
     if (!shouldRepeat()) return;
+    await new Promise(resolve => setTimeout(resolve, 1500)); // ⬅️ fix
     page = 1;
     hasMore = true;
   }

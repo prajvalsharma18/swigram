@@ -20,8 +20,7 @@
   font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
-html,
-body {
+html, body {
   height: 100%;
 }
 
@@ -196,7 +195,7 @@ body {
 }
 
 .sentinel {
-  height: 80px;
+  height: 200px; /* ⬅️ fix */
   width: 100%;
   flex-shrink: 0;
 }
@@ -278,7 +277,7 @@ body {
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Skeleton loading cards */
+/* Skeleton */
 .skeleton {
   position: relative;
   overflow: hidden;
@@ -300,9 +299,7 @@ body {
 }
 
 @keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
+  100% { transform: translateX(100%); }
 }
 
 .skPoster {
@@ -364,9 +361,7 @@ body {
 }
 
 @media (max-width: 680px) {
-  :root {
-    --topbar-h: 130px;
-  }
+  :root { --topbar-h: 130px; }
   .topbar {
     grid-template-columns: 1fr;
     justify-items: start;
