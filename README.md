@@ -3,7 +3,7 @@ Developed Swigram, a simple food-reels based platform focused on performance —
 
 1. Redis Caching
 
-Integrated Redis caching using Cache-Aside pattern, reducing API response time from 97ms to 1ms (~99% improvement) on cache hits. Implemented per-user cache keys for liked reels with automatic invalidation on like/unlike actions, 5-minute TTL, and graceful degradation to MongoDB if Redis is unavailable.
+Integrated Redis caching using Cache-Aside pattern, reducing API response time from 97ms to 1ms (~99% improvement) on cache hits. Implemented per-user cache keys for liked reels with automatic invalidation on like/unlike actions, 5-minute TTL, and graceful degradation to MongoDB if Redis is unavailable. Numbers were calculated using POSTMAN.
 
 
 2. AWS S3 + CloudFront CDN
