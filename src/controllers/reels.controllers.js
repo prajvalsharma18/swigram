@@ -10,11 +10,14 @@ function toPositiveInt(value, fallback) {
 }
 
 async function injectLikedStatus({ reels, page, limit, hasMore }, userId) {
+
   if (!userId) {
     return { success: true, data: reels.map((r) => ({ ...r, liked: false })), page, limit, hasMore };
   }
+
   const user = await userModel.findById(userId).select('likedReels').lean();
   const likedSet = new Set((user?.likedReels || []).map((x) => String(x.reelId)));
+
   return {
     success: true,
     data: reels.map((r) => ({ ...r, liked: likedSet.has(String(r._id)) })),
@@ -22,10 +25,11 @@ async function injectLikedStatus({ reels, page, limit, hasMore }, userId) {
     limit,
     hasMore
   };
+
 }
 
 async function getReels(req, res) {
-  const startTime = Date.now();
+
   try {
     const page = toPositiveInt(req.query.page, 1);
     const limit = Math.min(toPositiveInt(req.query.limit, 12), 50);
@@ -37,14 +41,12 @@ async function getReels(req, res) {
       if (cached) {
         const parsed = JSON.parse(cached);
         const result = await injectLikedStatus(parsed, req.user?._id);
-        result.meta = {
-          source: 'cache',
-          responseTime: Date.now() - startTime,
-          reelIds: parsed.reels.map(r => String(r._id))  
-        };
+        result.meta = { source: 'cache' };
         return res.json(result);
       }
-    } catch (redisErr) {
+
+    } 
+    catch (redisErr) {
       console.warn('Redis get failed, falling back to DB:', redisErr.message);
     }
 
@@ -55,18 +57,18 @@ async function getReels(req, res) {
 
     try {
       await redis.setEx(cacheKey, CACHE_TTL, JSON.stringify(payload));
-    } catch (redisErr) {
+    } 
+    catch (redisErr) {
       console.warn('Redis set failed:', redisErr.message);
     }
 
     const result = await injectLikedStatus(payload, req.user?._id);
-    result.meta = {
-      source: 'db',
-      responseTime: Date.now() - startTime,
-      reelIds: reels.map(r => String(r._id))  
-    };
+    result.meta = { source: 'db' };
+
     return res.json(result);
-  } catch (err) {
+
+  } 
+  catch (err) {
     return res.status(500).json({ success: false, message: err?.message || 'Failed to fetch reels.' });
   }
 }
@@ -103,18 +105,19 @@ async function toggleLikeReel(req, res) {
 
     try {
       await redis.del(`reels:liked:${userId}`);
-    } catch (redisErr) {
+    } 
+    catch (redisErr) {
       console.warn('Redis del failed:', redisErr.message);
     }
 
     return res.json({ success: true, data: { liked, likedCount: likedReels.length } });
-  } catch (err) {
+  } 
+  catch (err) {
     return res.status(500).json({ success: false, message: err?.message || 'Failed to toggle like.' });
   }
 }
 
 async function getLikedReels(req, res) {
-  const startTime = Date.now();
   try {
     const userId = req.user?._id;
     const page = toPositiveInt(req.query.page, 1);
@@ -134,14 +137,11 @@ async function getLikedReels(req, res) {
           page,
           limit,
           hasMore: end < all.length,
-          meta: {
-            source: 'cache',
-            responseTime: Date.now() - startTime,
-            reelIds: slice.map(r => String(r._id))  
-          }
+          meta: { source: 'cache' }
         });
       }
-    } catch (redisErr) {
+    } 
+    catch (redisErr) {
       console.warn('Redis get failed, falling back to DB:', redisErr.message);
     }
 
@@ -161,7 +161,8 @@ async function getLikedReels(req, res) {
 
     try {
       await redis.setEx(cacheKey, CACHE_TTL, JSON.stringify(ordered));
-    } catch (redisErr) {
+    } 
+    catch (redisErr) {
       console.warn('Redis set failed:', redisErr.message);
     }
 
@@ -172,11 +173,7 @@ async function getLikedReels(req, res) {
       page,
       limit,
       hasMore: end < ordered.length,
-      meta: {
-        source: 'db',
-        responseTime: Date.now() - startTime,
-        reelIds: slice.map(r => String(r._id))  
-      }
+      meta: { source: 'db' }
     });
   } catch (err) {
     return res.status(500).json({ success: false, message: err?.message || 'Failed to fetch liked reels.' });

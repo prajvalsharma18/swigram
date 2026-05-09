@@ -140,7 +140,6 @@ function appendReels(reels, meta) {
   if (!Array.isArray(reels) || reels.length === 0) return;
   const tmp = document.createElement("div");
   const isCache = meta?.source === 'cache';
-  const responseTime = meta?.responseTime ?? '?';
 
   tmp.innerHTML = reels
     .map((r) => {
@@ -161,7 +160,7 @@ function appendReels(reels, meta) {
             : `<div class="video" aria-hidden="true"></div>`
           }
           <div class="cacheBadge ${isCache ? 'cache' : 'db'}">
-            ${isCache ? '⚡ Cached' : '🗄️ Fresh'} · ${responseTime}ms
+            ${isCache ? '⚡ Cached' : '🗄️ Fresh'}
           </div>
           <div class="overlay">
             <div class="content">
