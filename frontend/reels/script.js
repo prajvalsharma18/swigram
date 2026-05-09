@@ -192,7 +192,7 @@ async function loadNextPage() {
 
   if (!hasMore) {
     if (!shouldRepeat()) return;
-    await new Promise(resolve => setTimeout(resolve, 1500)); // ⬅️ fix
+    await new Promise(resolve => setTimeout(resolve, 1500)); //  fix
     page = 1;
     hasMore = true;
   }

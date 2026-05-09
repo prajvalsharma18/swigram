@@ -195,7 +195,7 @@ body {
 }
 
 .sentinel {
-  height: 200px; /* ⬅️ fix */
+  height: 200px; /* fix */
   width: 100%;
   flex-shrink: 0;
 }
