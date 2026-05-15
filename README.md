@@ -1,4 +1,4 @@
-Developed Swigram, a simple food-reels based platform focused on performance — implementing Redis caching with ~78% API response time reduction and AWS CloudFront CDN for scalable media delivery.
+A simple food-reels based platform focused on performance — implementing Redis caching with ~78% API response time reduction and AWS CloudFront CDN for scalable media delivery.
 
 
 1. Redis Caching
